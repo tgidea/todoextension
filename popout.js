@@ -40,7 +40,8 @@ function fetchItems() {
         }
         var color1 = ['rgb(91, 121, 230)',' rgb(230, 91, 207)',' rgb(203, 186, 40)', 'rgb(213, 140, 58)'];
         let x = Math.floor(Math.random()*10);
-        let idx = x%4;
+        // let idx = x%4;
+        let idx = 0;
         for (var i = 0; i < itemsArr.length; i++) {
             console.log(idx);
             var status = '';
@@ -49,7 +50,7 @@ function fetchItems() {
             }
             newItemHTML += `<li style="background-color : ${color1[idx]};" data-itemindex="${i}" ${status}>
         <span class="item">${itemsArr[i].item}</span>
-        <div class="option"><button class="itemComplete">Done</button><button class="itemDelete">Delete</button></div>
+        <div class="option"><button id="complete${i}" class="itemComplete">Done</button><button class="itemDelete">Delete</button></div>
         </li>`;
         idx = idx +1;
         idx = idx%4;
@@ -77,9 +78,18 @@ function itemComplete(index) {
 
     var itemsStorage = localStorage.getItem('todo-items');
     var itemsArr = JSON.parse(itemsStorage);
-    itemsArr[index].status = 1;
+    console.log(itemsArr[index]);
+    if(itemsArr[index].status==1){
+        itemsArr[index].status = 0;
+        document.querySelector('ul.todo-items li[data-itemindex="' + index + '"]').className = '';
+        document.getElementById(`complete${index}`).innerText = "Done";
+    }
+    else{
+        itemsArr[index].status = 1;
+        document.querySelector('ul.todo-items li[data-itemindex="' + index + '"]').className = 'done';
+        document.getElementById(`complete${index}`).innerText = "Undo";
+    }
     saveItems(itemsArr);
-    document.querySelector('ul.todo-items li[data-itemindex="' + index + '"]').className = 'done';
 
 }
 function itemDelete(index) {

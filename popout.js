@@ -1,3 +1,31 @@
+var category = 'todo-items';
+const first = document.getElementById('1st');
+const second = document.getElementById('2nd');
+const third = document.getElementById('3rd');
+first.style.background =  'white';
+second.style.background =  'rgb(200, 199, 199)';
+third.style.background =  'rgb(200, 199, 199)';
+first.addEventListener('click',()=>{
+    category = 'todo-items';
+    first.style.background =  'white';
+    second.style.background =  'rgb(200, 199, 199)';
+    third.style.background =  'rgb(200, 199, 199)';
+    fetchItems();
+})
+second.addEventListener('click',()=>{
+    category = 'moderate';
+    second.style.background =  'white';
+    first.style.background =  'rgb(200, 199, 199)';
+    third.style.background =  'rgb(200, 199, 199)';
+    fetchItems();
+})
+third.addEventListener('click',()=>{
+    category = 'long';
+    third.style.background =  'white';
+    first.style.background =  'rgb(200, 199, 199)';
+    second.style.background =  'rgb(200, 199, 199)';
+    fetchItems();
+})
 document.querySelector('#textBox').addEventListener('keypress', checkUpdate2);
 document.querySelector('#btn').addEventListener('click', checkUpdate);
 function checkUpdate2(e){
@@ -6,11 +34,12 @@ function checkUpdate2(e){
     }
 }
 function checkUpdate() {
+    // todo-items
     var itemName = document.querySelector('.new-item input').value;
     console.log(itemName);
     if (itemName != '') {
 
-        var itemsStorage = localStorage.getItem('todo-items');
+        var itemsStorage = localStorage.getItem(`${category}`);
         if (itemsStorage == undefined || itemsStorage.length < 1) {
             itemsArr = [];
         }
@@ -30,7 +59,7 @@ function fetchItems() {
     itemsList.innerHTML = '';
     var newItemHTML = '';
     try {
-        var itemsStorage = localStorage.getItem('todo-items');
+        var itemsStorage = localStorage.getItem(`${category}`);
         var itemsArr
         if (itemsStorage == undefined || itemsStorage.length < 1) {
             itemsArr = [];
@@ -80,7 +109,7 @@ function fetchItems() {
 }
 
 function itemComplete(index) {
-    var itemsStorage = localStorage.getItem('todo-items');
+    var itemsStorage = localStorage.getItem(`${category}`);
     var itemsArr = JSON.parse(itemsStorage);
     console.log(itemsArr[index]);
     if(itemsArr[index].status==1){
@@ -98,16 +127,16 @@ function itemComplete(index) {
 }
 function itemDelete(index) {
 
-    var itemsStorage = localStorage.getItem('todo-items');
+    var itemsStorage = localStorage.getItem(`${category}`);
     var itemsArr = JSON.parse(itemsStorage);
     itemsArr.splice(index, 1);
     saveItems(itemsArr);
-    fetchItems()
+    fetchItems();
     //   document.querySelector('ul.todo-items li[data-itemindex="'+index+'"]').remove();
 }
 
 function saveItems(obj) {
     var string = JSON.stringify(obj);
-    localStorage.setItem('todo-items', string);
+    localStorage.setItem(`${category}`, string);
 }
 fetchItems();

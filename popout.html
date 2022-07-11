@@ -62,19 +62,47 @@
     .item{
         font-size: 1rem;
     }
-    
+    .mostouter{
+      margin-bottom: 5px;
+    }
+    .outer{
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      max-height: 52px;      
+      background-color: rgb(200, 199, 199);
+    }
+    .inner{
+      margin: 5px ;
+      position: relative;
+      width: 33%;
+      height: 100%;
+      top: 1.1px;
+      cursor: pointer;
+    }
     </style>
   </head>
   <body>
     
     <h1 style="margin-left: 30%;">My ToDo</h1>
-    </div>
     <!-- <button class="create-todo">New Item</button> -->
     <div class="new-item">
-        <input style="color: rgb(35, 121, 16)" id="textBox" type="text"/>
-        <button id="btn" >Save</button>
+      <input style="color: rgb(35, 121, 16)" id="textBox" type="text"/>
+      <button id="btn" >Save</button>
     </div>
-
+    <div class="mostouter">
+      <div class="outer">
+        <div class="inner " id="1st">
+          <h3 style="margin-left: 28%;">PRIOR</h3>
+        </div>
+        <div class="inner" id="2nd">
+          <h3 style="margin-left: 20%;">MODERATE</h3>
+        </div>
+        <div class="inner" id="3rd">
+          <h3 style="margin-left: 28%;">LONG</h3>
+        </div>
+      </div>
+    </div>
     <ul class="todo-items">
     </ul>
 

@@ -83,8 +83,8 @@ function fetchItems() {
                 opq = 0.5;
             }
             newItemHTML += `<li style="background-color : ${color}; opacity:${opq}" data-itemindex="${i}" ${status}>
-        <span style="color:${clor}" class="item">${itemsArr[i].item}</span>
-        <div class="option"><button id="complete${i}" class="itemComplete">${text}</button><button class="itemDelete">Delete</button></div>
+        <span style="color:${clor}" class="item complete">${itemsArr[i].item}</span>
+        <div class="option"><button class="itemDelete">Delete</button></div>
         </li>`;
         idx = idx +1;
         idx = idx%4;
@@ -94,8 +94,8 @@ function fetchItems() {
 
         var itemsListUL = document.querySelectorAll('ul li');
         for (var i = 0; i < itemsListUL.length; i++) {
-            itemsListUL[i].querySelector('.itemComplete').addEventListener('click', function () {
-                var index = this.parentNode.parentNode.dataset.itemindex;
+            itemsListUL[i].querySelector('.complete').addEventListener('click', function () {
+                var index = this.parentNode.dataset.itemindex;
                 itemComplete(index);
             });
             itemsListUL[i].querySelector('.itemDelete').addEventListener('click', function () {
@@ -115,12 +115,12 @@ function itemComplete(index) {
     if(itemsArr[index].status==1){
         itemsArr[index].status = 0;
         document.querySelector('ul.todo-items li[data-itemindex="' + index + '"]').className = '';
-        document.getElementById(`complete${index}`).innerText = "Done";
+        // document.getElementById(`complete${index}`).innerText = "Done";
     }
     else{
         itemsArr[index].status = 1;
         document.querySelector('ul.todo-items li[data-itemindex="' + index + '"]').className = 'done';
-        document.getElementById(`complete${index}`).innerText = "Undo";
+        // document.getElementById(`complete${index}`).innerText = "Undo";
     }
     saveItems(itemsArr);
     fetchItems();

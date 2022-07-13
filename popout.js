@@ -3,27 +3,27 @@ const first = document.getElementById('1st');
 const second = document.getElementById('2nd');
 const third = document.getElementById('3rd');
 first.style.background =  'white';
-second.style.background =  'rgb(200, 199, 199)';
-third.style.background =  'rgb(200, 199, 199)';
+second.style.background =  'rgba(24, 151, 143, .7)';
+third.style.background =  'rgba(24, 151, 143, .7)';
 first.addEventListener('click',()=>{
     category = 'todo-items';
     first.style.background =  'white';
-    second.style.background =  'rgb(200, 199, 199)';
-    third.style.background =  'rgb(200, 199, 199)';
+    second.style.background =  'rgba(24, 151, 143, .7)';
+    third.style.background =  'rgba(24, 151, 143, .7)';
     fetchItems();
 })
 second.addEventListener('click',()=>{
     category = 'moderate';
     second.style.background =  'white';
-    first.style.background =  'rgb(200, 199, 199)';
-    third.style.background =  'rgb(200, 199, 199)';
+    first.style.background =  'rgba(24, 151, 143, .7)';
+    third.style.background =  'rgba(24, 151, 143, .7)';
     fetchItems();
 })
 third.addEventListener('click',()=>{
     category = 'long';
     third.style.background =  'white';
-    first.style.background =  'rgb(200, 199, 199)';
-    second.style.background =  'rgb(200, 199, 199)';
+    first.style.background =  'rgba(24, 151, 143, .7)';
+    second.style.background =  'rgba(24, 151, 143, .7)';
     fetchItems();
 })
 document.querySelector('#textBox').addEventListener('keypress', checkUpdate2);
@@ -33,6 +33,7 @@ function checkUpdate2(e){
         checkUpdate();
     }
 }
+
 function checkUpdate() {
     // todo-items
     var itemName = document.querySelector('.new-item input').value;
@@ -67,22 +68,22 @@ function fetchItems() {
         else {
             itemsArr = JSON.parse(itemsStorage);
         }
-        var color1 = ['rgb(91, 121, 230)',' rgb(230, 91, 207)',' rgb(203, 186, 40)', 'rgb(213, 140, 58)'];
-        var color2 = 'rgb(206 202 202)';
+        var color1 = ['#DEEDF0','#F4C7AB',' #D8F8B7', '#29BB89'];
+        var color2 = 'white';
         let x = Math.floor(Math.random()*10);
         // let idx = x%4;
         let idx = 0;
         for (var i = 0; i < itemsArr.length; i++) {
             console.log(idx);
-            var status = '' , color = `${color1[idx]};` , text = 'Done' , clor = 'white' , opq = 1;
+            var status = '' , color = `${color1[idx]};` , text = 'Done' , clor = '#212121' , opq = 1;
             if (itemsArr[i].status == 1) {
                 status = 'class="done"';
                 color = `${color2}`;
                 text = 'Undo';
                 clor = '#958e8e;';
-                opq = 0.5;
+                opq = 1;
             }
-            newItemHTML += `<li style="background-color : ${color}; opacity:${opq}" data-itemindex="${i}" ${status}>
+            newItemHTML += `<li style="background-color: ${color}; opacity:${opq}; animation: animate .5s forwards " data-itemindex="${i}" ${status}>
         <span style="color:${clor}" class="item">${itemsArr[i].item}</span>
         <div class="option"><button id="complete${i}" class="itemComplete">${text}</button><button class="itemDelete">Delete</button></div>
         </li>`;

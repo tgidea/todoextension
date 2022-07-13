@@ -5,9 +5,12 @@
     <style>
     body{
         width:400px;
-        border: 3px solid grey;        
+        box-shadow: 14px 16px 16px rgb(0 0 0 / 33%);      
         padding: 0;
         margin: 0;
+        box-sizing: border-box;
+        font-family: monospace;
+      
     }
     .item{
         color: white;
@@ -15,6 +18,7 @@
     .todo-items{
       display: flex;
       flex-direction: column-reverse;
+      transition: .5s;
     }
     .todo-items,
     .todo-items li{
@@ -24,9 +28,21 @@
     }
     .todo-items li{
       padding:10px;
-      border-bottom: 2px solid grey;
+      border-bottom: 2px solid rgba(0,0,0,0.1);
       display:flex;
       justify-content: space-between;
+      transition: .5s;
+    }
+    @keyframes animate{
+      0%{
+        transform: translate(0,0);
+      }
+      50%{
+        transform: translate(0,20%);
+      }
+      100%{
+        transform: translate(0,0%);
+      }
     }
     .todo-items li:hover{
       background:rgba(0,0,0,0.25);
@@ -42,25 +58,45 @@
     }
     .itemComplete{
         background-color: rgb(9, 180, 9);
+        padding: .5rem;
+        border-radius: 5px;
+        box-shadow: 3px 2px 4px rgba(0,0,0,0.25);
         color: white;
+        border: none;       
         margin-right: 2px;
+        font-family: monospace;
     }
     .itemDelete{        
         background-color: rgb(206, 79, 30);
+        padding: .5rem;
+        border-radius: 5px;
+        box-shadow: 3px 2px 4px rgba(0,0,0,0.25);
         color: white;
+        border: none;
+        font-family: monospace;
     }
-    #textBox , .btn{
+    #textBox{
         height: 22px;
+    }
+    #btn{
+      padding: 5px;
+      font-family: monospace;
+      border: 2px solid rgba(0,0,0,0.45);
+      border-radius: 5px;
+      background-color: #212121;
+      color: whitesmoke;
     }
     .new-item{
       display:block;
-      margin-bottom: 6px;
+      margin-bottom: 1rem;
       margin-left: 20%;
     }
     .option{
         min-width: 116px;
         position: relative;
-        right: 15px;
+        display: flex;
+        align-items: center;
+
     }
     .item{
         font-size: 1rem;
@@ -74,22 +110,29 @@
       display: flex;
       flex-direction: row;
       position: relative;
-      max-height: 52px;      
-      background-color: rgb(200, 199, 199);
+      max-height: 43px;      
+      
     }
     .inner{
-      margin: 5px ;
       position: relative;
-      width: 33%;
+      width: 33.5%;
       height: 100%;
-      top: 0.2px;
       cursor: pointer;
+      color: #212121;
+      border-right: 2px solid rgb(12, 82, 77) ;
+    
+    }
+    .inner:nth-child(1) {
+      border-left: 2px solid rgb(12, 82, 77) ;
+    }
+    .inner h3{
+      text-align: center;
     }
     </style>
   </head>
   <body>
     
-    <h1 style="margin-left: 30%;">My ToDo</h1>
+    <h1 style="text-align: center;">My ToDo</h1>
     <!-- <button class="create-todo">New Item</button> -->
     <div class="new-item">
       <input style="color: rgb(35, 121, 16)" id="textBox" type="text"/>
@@ -98,13 +141,13 @@
     <div class="mostouter">
       <div class="outer">
         <div class="inner " id="1st">
-          <h3 style="margin-left: 28%;">PRIOR</h3>
+          <h3 >PRIOR</h3>
         </div>
         <div class="inner" id="2nd">
-          <h3 style="margin-left: 20%;">MODERATE</h3>
+          <h3>MODERATE</h3>
         </div>
         <div class="inner" id="3rd">
-          <h3 style="margin-left: 28%;">LONG</h3>
+          <h3>LONG</h3>
         </div>
       </div>
     </div>

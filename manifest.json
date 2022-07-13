@@ -2,7 +2,7 @@
   "name": "do this",
   "version": "1.0",
   "browser_action": {
-    "default_title": "popout HTML",
+    "default_title": "Add tasks",
     "default_popup": "popout.html"
   },
   "icons": { "16": "image16.png", "48": "image48.png", "128": "image128.png" },

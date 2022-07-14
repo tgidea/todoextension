@@ -73,6 +73,7 @@ function fetchItems() {
         let x = Math.floor(Math.random()*10);
         // let idx = x%4;
         let idx = 0;
+        let inc = .1
         for (var i = 0; i < itemsArr.length; i++) {
             console.log(idx);
             var status = '' , color = `${color1[idx]};` , text = 'Done' , clor = '#212121' , opq = 1;
@@ -83,22 +84,21 @@ function fetchItems() {
                 clor = '#958e8e;';
                 opq = 1;
             }
-
-            newItemHTML += `<li style="background-color: ${color}; opacity:${opq}; animation: animate .5s forwards " data-itemindex="${i}" ${status}>
+            newItemHTML += `<li style="background-color: ${color}; opacity:${opq}; animation: animate ${inc}s forwards" data-itemindex="${i}" ${status}>
         <span style="color:${clor}" class="item">${itemsArr[i].item}</span>
         <div class="option"><button id="complete${i}" class="itemComplete">${text}</button><button class="itemDelete">Delete</button></div>
-
         </li>`;
         idx = idx +1;
         idx = idx%4;
+        inc+=.1
         }
 
         itemsList.innerHTML = newItemHTML;
 
         var itemsListUL = document.querySelectorAll('ul li');
         for (var i = 0; i < itemsListUL.length; i++) {
-            itemsListUL[i].querySelector('.complete').addEventListener('click', function () {
-                var index = this.parentNode.dataset.itemindex;
+            itemsListUL[i].querySelector('.itemComplete').addEventListener('click', function () {
+                var index = this.parentNode.parentNode.dataset.itemindex;
                 itemComplete(index);
             });
             itemsListUL[i].querySelector('.itemDelete').addEventListener('click', function () {
@@ -118,12 +118,12 @@ function itemComplete(index) {
     if(itemsArr[index].status==1){
         itemsArr[index].status = 0;
         document.querySelector('ul.todo-items li[data-itemindex="' + index + '"]').className = '';
-        // document.getElementById(`complete${index}`).innerText = "Done";
+        document.getElementById(`complete${index}`).innerText = "Done";
     }
     else{
         itemsArr[index].status = 1;
         document.querySelector('ul.todo-items li[data-itemindex="' + index + '"]').className = 'done';
-        // document.getElementById(`complete${index}`).innerText = "Undo";
+        document.getElementById(`complete${index}`).innerText = "Undo";
     }
     saveItems(itemsArr);
     fetchItems();

@@ -2,42 +2,56 @@ var category = 'todo-items';
 const first = document.getElementById('1st');
 const second = document.getElementById('2nd');
 const third = document.getElementById('3rd');
-first.style.background =  'white';
-second.style.background =  'rgba(24, 151, 143, .7)';
-third.style.background =  'rgba(24, 151, 143, .7)';
-first.addEventListener('click',()=>{
+
+first.style.background = 'white';
+second.style.background = 'rgba(24, 151, 143, .7)';
+third.style.background = 'rgba(24, 151, 143, .7)';
+function focuss() {
+    document.getElementById('textBox').focus();
+}
+
+// 3 listener for prior , moderate and long handling : ****************
+
+first.addEventListener('click', () => {
     category = 'todo-items';
-    first.style.background =  'white';
-    second.style.background =  'rgba(24, 151, 143, .7)';
-    third.style.background =  'rgba(24, 151, 143, .7)';
+    first.style.background = 'white';
+    second.style.background = 'rgba(24, 151, 143, .7)';
+    third.style.background = 'rgba(24, 151, 143, .7)';
+    focuss();
     fetchItems();
 })
-second.addEventListener('click',()=>{
+second.addEventListener('click', () => {
     category = 'moderate';
-    second.style.background =  'white';
-    first.style.background =  'rgba(24, 151, 143, .7)';
-    third.style.background =  'rgba(24, 151, 143, .7)';
+    second.style.background = 'white';
+    first.style.background = 'rgba(24, 151, 143, .7)';
+    third.style.background = 'rgba(24, 151, 143, .7)';
+    focuss();
     fetchItems();
 })
-third.addEventListener('click',()=>{
+third.addEventListener('click', () => {
     category = 'long';
-    third.style.background =  'white';
-    first.style.background =  'rgba(24, 151, 143, .7)';
-    second.style.background =  'rgba(24, 151, 143, .7)';
+    third.style.background = 'white';
+    first.style.background = 'rgba(24, 151, 143, .7)';
+    second.style.background = 'rgba(24, 151, 143, .7)';
+    focuss();
     fetchItems();
 })
+
+// ***********************************************************
+
 document.querySelector('#textBox').addEventListener('keypress', checkUpdate2);
 document.querySelector('#btn').addEventListener('click', checkUpdate);
-function checkUpdate2(e){
-    if(e.key=='Enter'){
+function checkUpdate2(e) {
+    if (e.key == 'Enter') {
         checkUpdate();
     }
 }
 
+// save new data to local storage 
+
 function checkUpdate() {
     // todo-items
     var itemName = document.querySelector('.new-item input').value;
-    console.log(itemName);
     if (itemName != '') {
 
         var itemsStorage = localStorage.getItem(`${category}`);
@@ -47,15 +61,16 @@ function checkUpdate() {
         else {
             var itemsArr = JSON.parse(itemsStorage);
         }
-        itemsArr.push({ "item": itemName, "status": 0 });
+        itemsArr.push({ "item": itemName, "status": 0 , "priority":"100000"});
         saveItems(itemsArr);
         fetchItems();
         document.querySelector('.new-item input').value = '';
     }
 }
 
-function fetchItems() {
+// show content from local storage based on category selected and listener to ul->li
 
+function fetchItems() {
     const itemsList = document.querySelector('ul.todo-items');
     itemsList.innerHTML = '';
     var newItemHTML = '';
@@ -68,15 +83,16 @@ function fetchItems() {
         else {
             itemsArr = JSON.parse(itemsStorage);
         }
-        var color1 = ['#DEEDF0','#F4C7AB',' #D8F8B7', '#29BB89'];
+
+        // giving color to each li
+
+        var color1 = ['#DEEDF0', '#F4C7AB', ' #D8F8B7', '#29BB89'];
         var color2 = 'white';
-        let x = Math.floor(Math.random()*10);
-        // let idx = x%4;
+        let x = Math.floor(Math.random() * 10);        
         let idx = 0;
         let inc = .1
         for (var i = 0; i < itemsArr.length; i++) {
-            console.log(idx);
-            var status = '' , color = `${color1[idx]};` , text = 'Done' , clor = '#212121' , opq = 1;
+            var status = '', color = `${color1[idx]};`, text = 'Done', clor = '#212121', opq = 1;
             if (itemsArr[i].status == 1) {
                 status = 'class="done"';
                 color = `${color2}`;
@@ -84,18 +100,25 @@ function fetchItems() {
                 clor = '#958e8e;';
                 opq = 1;
             }
-            newItemHTML += `<li style="background-color: ${color}; opacity:${opq}; animation: animate ${inc}s forwards" data-itemindex="${i}" ${status}>
-        <span style="color:${clor}" class="item">${itemsArr[i].item}</span>
-        <div class="option"><button id="complete${i}" class="itemComplete">${text}</button><button class="itemDelete">Delete</button></div>
-        </li>`;
-        idx = idx +1;
-        idx = idx%4;
-        inc+=.1
+            newItemHTML += `
+            <li style="position:relative; background-color: ${color}; opacity:${opq}; animation: animate ${inc}s forwards" data-itemindex="${i}" ${status}>
+                <div class="alert1" id="noti${i}">Number</div>
+                <span style="color:${clor};" class="item">${itemsArr[i].item}</span>
+                <div class="option">
+                    <button id="complete${i}" class="itemComplete">${text}</button>
+                    <button class="itemDelete">Delete</button>
+                </div>
+            </li>`;
+            idx = idx + 1;
+            idx = idx % 4;
+            inc += .1
         }
 
         itemsList.innerHTML = newItemHTML;
-
         var itemsListUL = document.querySelectorAll('ul li');
+
+        // setting delete and done button listener
+        
         for (var i = 0; i < itemsListUL.length; i++) {
             itemsListUL[i].querySelector('.itemComplete').addEventListener('click', function () {
                 var index = this.parentNode.parentNode.dataset.itemindex;
@@ -105,22 +128,26 @@ function fetchItems() {
                 var index = this.parentNode.parentNode.dataset.itemindex;
                 itemDelete(index);
             });
+            itemsListUL[i].getElementsByTagName('span')[0].addEventListener('click',function(){
+                var index = this.parentNode.dataset.itemindex;                
+                setPriority(index);
+            })
         }
     } catch (e) {
     }
-
 }
+
+//Task completed action(handling click on done and undo)
 
 function itemComplete(index) {
     var itemsStorage = localStorage.getItem(`${category}`);
     var itemsArr = JSON.parse(itemsStorage);
-    console.log(itemsArr[index]);
-    if(itemsArr[index].status==1){
+    if (itemsArr[index].status == 1) {
         itemsArr[index].status = 0;
         document.querySelector('ul.todo-items li[data-itemindex="' + index + '"]').className = '';
         document.getElementById(`complete${index}`).innerText = "Done";
     }
-    else{
+    else {
         itemsArr[index].status = 1;
         document.querySelector('ul.todo-items li[data-itemindex="' + index + '"]').className = 'done';
         document.getElementById(`complete${index}`).innerText = "Undo";
@@ -128,18 +155,137 @@ function itemComplete(index) {
     saveItems(itemsArr);
     fetchItems();
 }
-function itemDelete(index) {
 
+//Task deleted action(handling click on delete button)
+
+function itemDelete(index) {
     var itemsStorage = localStorage.getItem(`${category}`);
     var itemsArr = JSON.parse(itemsStorage);
     itemsArr.splice(index, 1);
     saveItems(itemsArr);
     fetchItems();
-    //   document.querySelector('ul.todo-items li[data-itemindex="'+index+'"]').remove();
 }
+
+// save item to category variable name in local storage.
 
 function saveItems(obj) {
     var string = JSON.stringify(obj);
     localStorage.setItem(`${category}`, string);
 }
+// ****************Notification related functions ****************************
+
+// Handling click on notification bell to show notification
+
+function buttonClick() {
+    document.getElementById("imgg").src = "no_noti.png"
+    const notiBox = document.getElementById('notiBox');
+    if (notiBox.style.display == "block") {
+        notiBox.style.display = "none"
+    }
+    else {
+        notiBox.style.display = "block"
+    }
+}
+
+const imgg = document.getElementById('imgg');
+imgg.addEventListener('click', function () {
+    buttonClick();
+})
+
+// showing notificaition data in notificaion div
+
+const showNoti = (data) => {
+    const notification = document.getElementById('notification');
+    notification.innerHTML = "";
+    if (data.length == 0) {
+        notification.innerHTML += 'No new notification.';
+        return;
+    };
+    document.getElementById("imgg").src = "noti.png"
+    var output = '';
+
+    for (var i = 0; i < data.length; i++) {
+        if (data[i][0].length > 0) {
+            if (data[i][1].length > 0) {
+                output += `<a  href=${data[i][1]} target="_blank"> <p>${data[i][0]}</p></a>`
+            } else {
+                output += `<p>${data[i][0]}</p>`;
+            }
+        }
+    }
+    document.getElementById('notification').innerHTML += output;
+}
+
+// fetching notification content
+
+const getContentOfNoti = async () => {
+    const url = "https://script.google.com/macros/s/AKfycbyfnLoXIwyouJFqTU0S50QNDtD07GYYiEdrBm0BpBGRu1cIbPrvbL7rwJSGpEGdrQQX7Q/exec"
+    const notiBox = document.getElementById('notiBox').style.display = "none";
+    fetch(url)
+        .then(d => d.json())
+        .then(d => {
+            const data = d.data;            
+            showNoti(data);
+        })
+        .catch(err => { console.log(err) })
+}
+/**************************************************************************/
+/****************Priority Set/delete related function******************** */
+let priority = 1;
+let setButtonEnable = true;
+function setPriority(index){
+    if(setButtonEnable==false)return;    
+    var itemsStorage = localStorage.getItem(`${category}`);
+    var itemsArr = JSON.parse(itemsStorage);
+    if(itemsArr[index].priority!=(100000))return;    
+    itemsArr[index].priority = priority;
+
+    const setPriorityLi = document.getElementById(`noti${index}`);
+    setPriorityLi.innerText = `${priority}`;
+    setPriorityLi.style.display = "flex";
+
+    saveItems(itemsArr);
+    priority++; 
+}
+
+function clearPriority(){
+    priority = 1;   
+    var itemsStorage = localStorage.getItem(`${category}`);
+    var itemsArr = JSON.parse(itemsStorage);
+    for(let i = 0 ; i<itemsArr.length ; i++){
+        itemsArr[i].priority = "100000";
+    }
+    saveItems(itemsArr);
+}
+
+const priorityBtn = document.getElementById('priority');
+priorityBtn.addEventListener('click',function(e){
+    if(this.innerText.toLowerCase().trim()=="done"){
+        setButtonEnable = false;
+        const itemsList = document.querySelectorAll('ul li');
+        for (var i = 0; i < itemsList.length; i++) {                    
+            itemsList[i].getElementsByTagName('span')[0].style.cursor = "inherit";
+        }
+        this.innerText = "Sort Task";
+        var itemsStorage = localStorage.getItem(`${category}`);
+        var itemsArr = JSON.parse(itemsStorage);        
+        itemsArr.sort((a, b) => {return b.priority - a.priority;});        
+        saveItems(itemsArr);
+        fetchItems();
+    }
+    else{
+        setButtonEnable = true;
+        clearPriority();
+        const itemsList = document.querySelectorAll('ul li');
+        for (var i = 0; i < itemsList.length; i++) {               
+            itemsList[i].getElementsByTagName('span')[0].style.cursor = "pointer";
+        }
+        this.innerHTML = "&nbsp; Done &nbsp;&nbsp;";
+    }
+})
+// *****************************************************************************
+
+focuss();
 fetchItems();
+getContentOfNoti();
+

@@ -32,6 +32,20 @@
       justify-content: space-between;
       transition: .5s;
     }
+    .alert1{
+      position: absolute;
+      height: 85%;
+      z-index: 100;
+      width: 100%;
+      opacity: 0.8;
+      background-color: inherit;    
+      font-size: x-large;
+      justify-content: center;
+      align-items: center;
+      color: rgb(81, 79, 79);
+      font-weight:bolder;
+      display: none;
+    }
     @keyframes animate{
       0%{
         transform: translate(0,0);
@@ -77,7 +91,7 @@
     #textBox{
         height: 22px;
     }
-    #btn{
+    #btn {
       padding: 5px;
       font-family: monospace;
       border: 2px solid rgba(0,0,0,0.45);
@@ -88,7 +102,7 @@
     .new-item{
       display:block;
       margin-bottom: 1rem;
-      margin-left: 20%;
+      margin-left: 8%;
     }
     .option{
         min-width: 116px;
@@ -129,17 +143,22 @@
     </style>
   </head>
   <body>
-    
-    <h1 style="text-align: center;">My ToDo</h1>
-    <!-- <button class="create-todo">New Item</button> -->
+    <div id="notiBox" style="position: relative;">
+      <h2 id="notification" style="padding: 7px ; position: relative; top: -12px; text-align:center; background-color: rgb(251, 192, 186);">No new notification</h2>
+    </div>
+    <div>
+      <img id="imgg" style="position: absolute; right: 20px;" src="no_noti.png" alt="notification"></>
+      <h1 style="text-align: center;">My ToDo</h1>
+    </div>
     <div class="new-item">
+      <button title="After clicking it tap on your task in sort manner you want." id="priority" style="cursor:pointer;" >Sort Task</button>
       <input style="color: rgb(35, 121, 16)" id="textBox" type="text"/>
       <button id="btn" >Save</button>
     </div>
     <div class="mostouter">
       <div class="outer">
         <div class="inner " id="1st">
-          <h3 >PRIOR</h3>
+          <h3 >PRIORITY</h3>
         </div>
         <div class="inner" id="2nd">
           <h3>MODERATE</h3>

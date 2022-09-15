@@ -99,9 +99,9 @@ function fetchItems() {
                 clor = '#958e8e;';
                 opq = 1;
             }
-            //  animation: animate ${inc}s forwards
+            
             newItemHTML += `
-            <li style="position:relative; background-color: ${color}; opacity:${opq};" data-itemindex="${i}" ${status}>
+            <li style="position:relative; background-color: ${color}; opacity:${opq}; animation: animate ${inc}s forwards" data-itemindex="${i}" ${status}>
                 <div class="alert1" id="noti${i}">Number</div>
                 <span style="color:${clor};" class="item">${itemsArr[i].item}</span>
                 <div class="option">

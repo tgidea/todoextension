@@ -17,7 +17,7 @@
     .todo-items{
       display: flex;
       flex-direction: column-reverse;
-      transition: .5s;
+      /* transition: .5s; */
     }
     .todo-items,
     .todo-items li{
@@ -30,7 +30,7 @@
       border-bottom: 2px solid rgba(0,0,0,0.1);
       display:flex;
       justify-content: space-between;
-      transition: .5s;
+      /* transition: .5s; */
     }
     .alert1{
       position: absolute;
@@ -140,14 +140,49 @@
     .inner h3{
       text-align: center;
     }
+    #contestDiv{
+      display: flex;
+    }
+    .contestBox {
+      color: white;
+      width: 20%;
+      background: rgba(24, 151, 143, 0.7);
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid white;      
+    }
+    #contestData{
+      display: flex;
+      flex-direction: column;
+    }
+    .td{
+      background-color: antiquewhite;
+      font-size: 13px;
+      padding: 5px;
+      display: flex;    
+      width: -webkit-fill-available;      
+      border-top: 2px solid black;      
+      align-items: center;
+      min-height: 35px;
+    }
     </style>
   </head>
   <body>
     <div id="notiBox" style="position: relative;">
-      <h2 id="notification" style="padding: 7px ; position: relative; top: -12px; text-align:center; background-color: rgb(251, 192, 186);">No new notification</h2>
+      <div>
+        <div id="contestDiv">
+          <div class="contestBox">Leetcode</div>
+          <div class="contestBox">Codeforces</div>
+          <div class="contestBox">Codechef</div>
+          <div class="contestBox">Atcoder</div>
+        </div>
+      </div>
+      <div id="contestData">
+
+      </div>
     </div>
     <div>
-      <img id="imgg" style="position: absolute; right: 20px;" src="no_noti.png" alt="notification"></>
+      <img id="imgg" style="position: absolute; right: 20px;" src="no_noti.png" alt="contest button"></>
       <h1 style="text-align: center;">My ToDo</h1>
     </div>
     <div class="new-item">

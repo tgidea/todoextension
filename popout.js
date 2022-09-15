@@ -52,8 +52,7 @@ function checkUpdate2(e) {
 function checkUpdate() {
     // todo-items
     var itemName = document.querySelector('.new-item input').value;
-    if (itemName != '') {
-
+    if (itemName.trim() != '') {
         var itemsStorage = localStorage.getItem(`${category}`);
         if (itemsStorage == undefined || itemsStorage.length < 1) {
             itemsArr = [];
@@ -100,8 +99,9 @@ function fetchItems() {
                 clor = '#958e8e;';
                 opq = 1;
             }
+            //  animation: animate ${inc}s forwards
             newItemHTML += `
-            <li style="position:relative; background-color: ${color}; opacity:${opq}; animation: animate ${inc}s forwards" data-itemindex="${i}" ${status}>
+            <li style="position:relative; background-color: ${color}; opacity:${opq};" data-itemindex="${i}" ${status}>
                 <div class="alert1" id="noti${i}">Number</div>
                 <span style="color:${clor};" class="item">${itemsArr[i].item}</span>
                 <div class="option">
@@ -117,7 +117,7 @@ function fetchItems() {
         itemsList.innerHTML = newItemHTML;
         var itemsListUL = document.querySelectorAll('ul li');
 
-        // setting delete and done button listener
+        // setting delete and done button and priority listener
         
         for (var i = 0; i < itemsListUL.length; i++) {
             itemsListUL[i].querySelector('.itemComplete').addEventListener('click', function () {
@@ -174,61 +174,70 @@ function saveItems(obj) {
 }
 // ****************Notification related functions ****************************
 
+// showing notificaition data in notificaion div
+let contestInfo = [];
+const showNoti = (platform) => {
+    const notification = document.getElementById('contestData');
+    notification.innerHTML = "";
+    if (contestInfo.length == 0) {
+        notification.innerHTML += 'Please click again and Check your network connection';
+        // setTimeout(function(){showNoti(platform)},1000);
+        return;
+    };    
+    var output = '';
+    for (var i = 0; i < contestInfo.length; i++) {                    
+        if(contestInfo[i][3]==`${platform}`)
+            output += `<div style = "display:flex;">
+                <div class="td"><a style="text-decoration:none; color: blue; " target=__blank href="${contestInfo[i][1]}">${contestInfo[i][0]}</a></div>
+                <div class="td">${contestInfo[i][2].slice(1,contestInfo[i][2].length)}</div>
+                <div class="td">${contestInfo[i][3]}</div>
+            </div>`
+    }
+    document.getElementById('contestData').innerHTML += output;
+}
+
+// fetching notification content
+
+const getContentOfNoti = async () => {
+    const url = "https://script.google.com/macros/s/AKfycbyf8sSaQeR-JFO2In80eFaalnz5oxk5Q7fT01k9NHwBQO65SmDMMQiJHOnthWcye54L8w/exec"
+    document.querySelector('body').style.cursor = "progress";
+    fetch(url)
+    .then(d => d.json())
+    .then(d => {
+        const data = d.data;  
+        contestInfo = data; 
+        document.querySelector('body').style.cursor = "default";
+        document.getElementById('contestDiv').style.cursor = "pointer";
+
+    })
+    .catch(err => { console.log(err) })
+}
 // Handling click on notification bell to show notification
 
 function buttonClick() {
-    document.getElementById("imgg").src = "no_noti.png"
     const notiBox = document.getElementById('notiBox');
     if (notiBox.style.display == "block") {
         notiBox.style.display = "none"
     }
     else {
         notiBox.style.display = "block"
+        getContentOfNoti();
     }
 }
-
+const notiBox = document.getElementById('notiBox').style.display = "none";
 const imgg = document.getElementById('imgg');
 imgg.addEventListener('click', function () {
     buttonClick();
 })
-
-// showing notificaition data in notificaion div
-
-const showNoti = (data) => {
-    const notification = document.getElementById('notification');
-    notification.innerHTML = "";
-    if (data.length == 0) {
-        notification.innerHTML += 'No new notification.';
-        return;
-    };
-    document.getElementById("imgg").src = "noti.png"
-    var output = '';
-
-    for (var i = 0; i < data.length; i++) {
-        if (data[i][0].length > 0) {
-            if (data[i][1].length > 0) {
-                output += `<a  href=${data[i][1]} target="_blank"> <p>${data[i][0]}</p></a>`
-            } else {
-                output += `<p>${data[i][0]}</p>`;
-            }
-        }
-    }
-    document.getElementById('notification').innerHTML += output;
+const contestDiv = document.getElementsByClassName('contestBox');
+for(let i = 0 ; i<contestDiv.length ; i++){
+    contestDiv[i].addEventListener('click',function(e){
+        const platform = this.innerText.toLowerCase();        
+           showNoti(platform); 
+    })
 }
 
-// fetching notification content
 
-const getContentOfNoti = async () => {
-    const url = "https://script.google.com/macros/s/AKfycbyfnLoXIwyouJFqTU0S50QNDtD07GYYiEdrBm0BpBGRu1cIbPrvbL7rwJSGpEGdrQQX7Q/exec"
-    const notiBox = document.getElementById('notiBox').style.display = "none";
-    fetch(url)
-        .then(d => d.json())
-        .then(d => {
-            const data = d.data;            
-            showNoti(data);
-        })
-        .catch(err => { console.log(err) })
-}
 /**************************************************************************/
 /****************Priority Set/delete related function******************** */
 let priority = 1;
@@ -287,5 +296,5 @@ priorityBtn.addEventListener('click',function(e){
 
 focuss();
 fetchItems();
-getContentOfNoti();
+
 

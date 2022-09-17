@@ -199,18 +199,18 @@ const showNoti = (platform) => {
 // fetching notification content
 
 const getContentOfNoti = async () => {
-    const url = "https://script.google.com/macros/s/AKfycbyf8sSaQeR-JFO2In80eFaalnz5oxk5Q7fT01k9NHwBQO65SmDMMQiJHOnthWcye54L8w/exec"
+    const url = "https://script.google.com/macros/s/AKfycbwt3XMTXkvrnMrirIwsiTGTt4ysambn12ToAwT4HonGewxJA0vjBVykTswGl-HH4m0Hkg/exec"
     document.querySelector('body').style.cursor = "progress";
     fetch(url)
     .then(d => d.json())
     .then(d => {
         const data = d.data;  
-        contestInfo = data; 
+        contestInfo = data;        
         document.querySelector('body').style.cursor = "default";
         document.getElementById('contestDiv').style.cursor = "pointer";
-
+        localStorage.setItem("contestData",JSON.stringify(data));        
     })
-    .catch(err => { console.log(err) })
+    .catch(err => { console.log(err);  })
 }
 // Handling click on notification bell to show notification
 
@@ -221,7 +221,17 @@ function buttonClick() {
     }
     else {
         notiBox.style.display = "block"
-        getContentOfNoti();
+        const lastUpdate = localStorage.getItem("lastUpdate");
+        const contestData = localStorage.getItem("contestData");        
+        if(lastUpdate==undefined || lastUpdate==NaN || lastUpdate == null || contestData==null || contestData==undefined || contestData.length<1 || (Date.now()-parseInt(lastUpdate))>1800000 ){
+            localStorage.setItem("lastUpdate",Date.now());
+            console.log('new data fetched');
+            getContentOfNoti();
+        }
+        else{
+            console.log('Data retrieve from local storage.');
+            contestInfo = JSON.parse(contestData);
+        }
     }
 }
 const notiBox = document.getElementById('notiBox').style.display = "none";
